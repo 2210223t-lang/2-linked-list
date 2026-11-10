@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include "log.h"
-#include "list_config.h"
+#include "../list/list_config.h"
 
 
 

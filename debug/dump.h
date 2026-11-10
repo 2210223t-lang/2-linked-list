@@ -1,6 +1,6 @@
 #pragma once
 
-#include "list_config.h"
+#include "../list/list_config.h"
 
 
 void

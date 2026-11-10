@@ -2,7 +2,7 @@
 #include <limits.h>
 #include <stdio.h>
 
-#include "list_config.h"
+#include "../list/list_config.h"
 #include "log.h"
 
 

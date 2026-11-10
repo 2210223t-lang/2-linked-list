@@ -3,9 +3,9 @@
 #include <assert.h>
 
 #include "list_config.h"
-#include "log.h"
-#include "colours.h"
-#include "dump.h"
+#include "../debug/log.h"
+#include "../debug/colours.h"
+#include "../debug/dump.h"
 
 static int c = 0;
 
