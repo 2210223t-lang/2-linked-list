@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "list.h"
-#include "list_config.h"
-#include "dump.h"
-#include "log.h"
+#include "list/list.h"
+#include "list/list_config.h"
+#include "debug/dump.h"
+#include "debug/log.h"
 
 
 int
