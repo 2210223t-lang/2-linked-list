@@ -23,11 +23,22 @@ list_elem
     int next;
 };
 
+
+struct
+elem_stat
+{
+    char seqfal  :1; //< Sequence fault
+    char datainc :1; //< Data's inconsistency
+    char fatal   :1; //< Fatal fault ( avoid printing )
+    char freefal :1; //< Free value fault
+    char freespac:4;
+};
+
 struct
 list_man
 {
     list_elem* data;
     int capacity;
     int free;
-    bool status;
+    elem_stat* status;
 };

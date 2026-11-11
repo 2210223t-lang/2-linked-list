@@ -6,8 +6,13 @@
 #include "../debug/log.h"
 #include "../debug/colours.h"
 #include "../debug/dump.h"
+#include "../debug/debug.h"
+
 
 static int c = 0;
+
+
+
 
 ListError
 list_init ( list_man* list )
@@ -16,18 +21,19 @@ list_init ( list_man* list )
 
     fprintf( stderr, "Initializing.\n\n" );
 
-    list->data = ( list_elem* ) calloc( MIN_LIST_SIZE, sizeof( list_elem ) );
+    list->data   = ( list_elem* ) calloc( MIN_LIST_SIZE, sizeof( list_elem ) );
+    list->status = ( elem_stat* ) calloc( MIN_LIST_SIZE, sizeof( elem_stat ) );
 
-    if ( !list->data )
+    if ( !list->data || !list->status )
     {
         printlg( "Initialization error.\n"
                  "Cannot allocate enough space, check parameters.\n\n" );
 
-        list->status = false;
+        list->status[ 0 ].fatal = true;
         return Failure;
     }
 
-    list->status = true;
+    list->status[ 0 ].fatal = false;
     list->capacity = MIN_LIST_SIZE;
     list->free = 1;
 
@@ -38,6 +44,7 @@ list_init ( list_man* list )
 
 
     printlg( "Init result:\n\n" );
+    verify( list );
     dump_dot( list );
 
     return Success;
@@ -49,11 +56,9 @@ list_destr ( list_man* list )
 {
     assert( list );
 
-    if ( !list->status )
-    {
-        printlg( RED "Avoid destroing invalid list.</p>\n\n" );
+    if ( list->status[ 0 ].fatal )
         return Failure;
-    }
+
     if ( !list->data )
     {
         printlg( RED "Attempt to destroy null-pointer list.</p>\n\n" );
@@ -70,33 +75,35 @@ reall_list ( list_man* list )
 {
     assert( list );
 
-    if ( !list->status )
-    {
-        printlg( RED "Stopping reallocation of invalid list.</p>\n\n" );
+    if ( list->status[ 0 ].fatal )
         return Failure;
-    }
 
-    int temp = list->capacity;
+    list_elem* data_temp = 0;
+    elem_stat* stat_temp = 0;
+    int cap_temp = 0;
 
-    list->capacity *= 2;
-    list->data = ( list_elem* ) realloc( list->data, sizeof( list_elem ) * list->capacity );
+    cap_temp = 2 * list->capacity;
+    data_temp = ( list_elem* ) realloc( list->data,   sizeof( list_elem ) * list->capacity );
+    stat_temp = ( elem_stat* ) realloc( list->status, sizeof( elem_stat ) * list->capacity );
 
-    if ( !list->data )
+    if ( !data_temp || !stat_temp )
     {
         printlg( RED "List reallocation failure.</p>\n\n" );
-        list->status = false;
+        list->status[ 0 ].fatal = true;
         return Failure;
     }
 
-    int i = list->free;
+    if ( data_temp ) list->data = data_temp;
+    if ( stat_temp ) list->status = stat_temp;
+    list->capacity = cap_temp;
 
-    while ( list->data[ i ].next )
-        i = list->data[ i ].next;
+    list->free = cap_temp;
 
-    list->data[ i ].next = temp;
-
-    for ( int j = temp; j < list->capacity; i++ )
+    for ( int j = list->free; j < list->capacity; j++ )
+    {
+        *( ( char* ) list->status + j ) = 0;
         list->data[ j ] = { .value = 0, .prev = -1, .next = ( j + 1 ) % list->capacity };
+    }
 
     return Success;
 }
@@ -107,11 +114,8 @@ list_add ( list_man* list, int num, int value )
 {
     assert( list );
 
-    if ( !list->status )
-    {
-        printlg( RED "Avoiding adding into invalid list.</p>\n\n" );
+    if ( list->status[ 0 ].fatal )
         return Failure;
-    }
 
     if ( !list->free )
     {
@@ -124,7 +128,7 @@ list_add ( list_man* list, int num, int value )
     {
         printlg( RED "invalid element number.\n"
                      "Previous element isn't initialized. Number: %d</p>\n\n", num );
-        list->status = false;
+        list->status[ 0 ].fatal = true;
         return Failure;
     }
 
@@ -135,8 +139,8 @@ list_add ( list_man* list, int num, int value )
     list->data[ list->data[ list->free ].next ].prev = list->free;
     list->free = buff;
 
-
     printlg( BLU "Adding new elem result:</p>\n\n" );
+    verify( list );
     dump_dot( list );
 
     return list->data[ num ].next;
@@ -148,11 +152,8 @@ list_pushb ( list_man* list, int value )
 {
     assert( list );
 
-    if ( !list->status )
-    {
-        printlg( RED "Avoiding pushingb into invalid list.</p>\n\n" );
+    if ( list->status[ 0 ].fatal )
         return Failure;
-    }
 
     return list_add( list, list->data[ 0 ].prev, value );
 }
@@ -163,18 +164,15 @@ list_extr ( list_man* list, int num )
 {
     assert( list );
 
-    if ( !list->status )
-    {
-        printlg( RED "Avoid extracting from invalid list.</p>\n\n" );
+    if ( list->status[ 0 ].fatal )
         return Failure;
-    }
 
     if ( list->data[ num ].prev == -1 )
     {
         printlg( "invalid extraction number.\n"
                  "This element wasn't initialized.\n\n" );
 
-        list->status = false;
+        list->status[ 0 ].fatal = true;
         return Failure;
     }
 
@@ -187,7 +185,7 @@ list_extr ( list_man* list, int num )
 
         printlg( "<p " RED "Attempt to extract from and empty - lenght list.</p>\n\n" );
 
-        list->status = false;
+        list->status[ 0 ].fatal = true;
         return Failure;
     }
 
@@ -195,10 +193,10 @@ list_extr ( list_man* list, int num )
     list->data[ list->data[ num ].next ].prev = list->data[ num ].prev;
 
     list->data[ num ] = { .value = 0, .prev = -1, .next = list->free };
-    list->data[ list->free ].prev = -1;
     list->free = num;
 
     printlg( BLU "Extracting result:</p>\n\n" );
+    verify( list );
     dump_dot( list );
 
     return Success;
@@ -210,17 +208,14 @@ list_get ( list_man* list, int num )
 {
     assert( list );
 
-    if ( !list->status )
-    {
-        printlg( RED "Avoiding getting values from invalid list.</p>\n\n" );
+    if ( list->status[ 0 ].fatal )
         return Failure;
-    }
 
     if ( list->data[ num ].prev == -1 )
     {
         printlg( "Getter failure.\n"
                  "Attempt to get value from shattered list.\n\n" );
-        list->status = false;
+        list->status[ 0 ].fatal = true;
         return NULL;
     }
 

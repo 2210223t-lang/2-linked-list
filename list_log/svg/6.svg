@@ -11,7 +11,7 @@
 <!-- n0 -->
 <g id="node1" class="node">
 <title>n0</title>
-<path fill="lightyellow" stroke="lightyellow" d="M12,-0.5C12,-0.5 55.75,-0.5 55.75,-0.5 61.75,-0.5 67.75,-6.5 67.75,-12.5 67.75,-12.5 67.75,-46 67.75,-46 67.75,-52 61.75,-58 55.75,-58 55.75,-58 12,-58 12,-58 6,-58 0,-52 0,-46 0,-46 0,-12.5 0,-12.5 0,-6.5 6,-0.5 12,-0.5"/>
+<path fill="#b4da08" stroke="#b4da08" d="M12,-0.5C12,-0.5 55.75,-0.5 55.75,-0.5 61.75,-0.5 67.75,-6.5 67.75,-12.5 67.75,-12.5 67.75,-46 67.75,-46 67.75,-52 61.75,-58 55.75,-58 55.75,-58 12,-58 12,-58 6,-58 0,-52 0,-46 0,-46 0,-12.5 0,-12.5 0,-6.5 6,-0.5 12,-0.5"/>
 <text xml:space="preserve" text-anchor="middle" x="33.88" y="-40.7" font-family="Times,serif" font-size="14.00">value = 0</text>
 <text xml:space="preserve" text-anchor="middle" x="33.88" y="-24.2" font-family="Times,serif" font-size="14.00">prev = 5</text>
 <text xml:space="preserve" text-anchor="middle" x="33.88" y="-7.7" font-family="Times,serif" font-size="14.00">next = 1</text>
@@ -19,8 +19,8 @@
 <!-- n1 -->
 <g id="node2" class="node">
 <title>n1</title>
-<path fill="lightblue" stroke="lightblue" d="M115.75,-0.5C115.75,-0.5 159.5,-0.5 159.5,-0.5 165.5,-0.5 171.5,-6.5 171.5,-12.5 171.5,-12.5 171.5,-46 171.5,-46 171.5,-52 165.5,-58 159.5,-58 159.5,-58 115.75,-58 115.75,-58 109.75,-58 103.75,-52 103.75,-46 103.75,-46 103.75,-12.5 103.75,-12.5 103.75,-6.5 109.75,-0.5 115.75,-0.5"/>
-<text xml:space="preserve" text-anchor="middle" x="137.62" y="-40.7" font-family="Times,serif" font-size="14.00">value = 0</text>
+<path fill="#00c6c9" stroke="#00c6c9" d="M115.75,-0.5C115.75,-0.5 159.5,-0.5 159.5,-0.5 165.5,-0.5 171.5,-6.5 171.5,-12.5 171.5,-12.5 171.5,-46 171.5,-46 171.5,-52 165.5,-58 159.5,-58 159.5,-58 115.75,-58 115.75,-58 109.75,-58 103.75,-52 103.75,-46 103.75,-46 103.75,-12.5 103.75,-12.5 103.75,-6.5 109.75,-0.5 115.75,-0.5"/>
+<text xml:space="preserve" text-anchor="middle" x="137.62" y="-40.7" font-family="Times,serif" font-size="14.00">value = 1</text>
 <text xml:space="preserve" text-anchor="middle" x="137.62" y="-24.2" font-family="Times,serif" font-size="14.00">prev = 0</text>
 <text xml:space="preserve" text-anchor="middle" x="137.62" y="-7.7" font-family="Times,serif" font-size="14.00">next = 2</text>
 </g>
@@ -28,8 +28,8 @@
 <!-- n2 -->
 <g id="node3" class="node">
 <title>n2</title>
-<path fill="#c8e6c9" stroke="#c8e6c9" d="M219.5,-0.5C219.5,-0.5 263.25,-0.5 263.25,-0.5 269.25,-0.5 275.25,-6.5 275.25,-12.5 275.25,-12.5 275.25,-46 275.25,-46 275.25,-52 269.25,-58 263.25,-58 263.25,-58 219.5,-58 219.5,-58 213.5,-58 207.5,-52 207.5,-46 207.5,-46 207.5,-12.5 207.5,-12.5 207.5,-6.5 213.5,-0.5 219.5,-0.5"/>
-<text xml:space="preserve" text-anchor="middle" x="241.38" y="-40.7" font-family="Times,serif" font-size="14.00">value = 1</text>
+<path fill="#a9062f" stroke="#a9062f" d="M219.5,-0.5C219.5,-0.5 263.25,-0.5 263.25,-0.5 269.25,-0.5 275.25,-6.5 275.25,-12.5 275.25,-12.5 275.25,-46 275.25,-46 275.25,-52 269.25,-58 263.25,-58 263.25,-58 219.5,-58 219.5,-58 213.5,-58 207.5,-52 207.5,-46 207.5,-46 207.5,-12.5 207.5,-12.5 207.5,-6.5 213.5,-0.5 219.5,-0.5"/>
+<text xml:space="preserve" text-anchor="middle" x="241.38" y="-40.7" font-family="Times,serif" font-size="14.00">value = 2</text>
 <text xml:space="preserve" text-anchor="middle" x="241.38" y="-24.2" font-family="Times,serif" font-size="14.00">prev = 1</text>
 <text xml:space="preserve" text-anchor="middle" x="241.38" y="-7.7" font-family="Times,serif" font-size="14.00">next = 3</text>
 </g>
@@ -37,29 +37,29 @@
 <!-- n1&#45;&gt;n2 -->
 <g id="edge8" class="edge">
 <title>n1&#45;&gt;n2</title>
-<path fill="none" stroke="lightblue" d="M171.94,-35.63C179.57,-35.96 187.81,-36.07 195.83,-35.95"/>
-<polygon fill="lightblue" stroke="lightblue" points="195.92,-39.45 205.82,-35.66 195.72,-32.46 195.92,-39.45"/>
+<path fill="none" stroke="#00c6c9" d="M171.94,-35.63C179.57,-35.96 187.81,-36.07 195.83,-35.95"/>
+<polygon fill="#00c6c9" stroke="#00c6c9" points="195.92,-39.45 205.82,-35.66 195.72,-32.46 195.92,-39.45"/>
 </g>
 <!-- n3 -->
 <g id="node4" class="node">
 <title>n3</title>
-<path fill="#c8e6c9" stroke="#c8e6c9" d="M323.25,-0.5C323.25,-0.5 367,-0.5 367,-0.5 373,-0.5 379,-6.5 379,-12.5 379,-12.5 379,-46 379,-46 379,-52 373,-58 367,-58 367,-58 323.25,-58 323.25,-58 317.25,-58 311.25,-52 311.25,-46 311.25,-46 311.25,-12.5 311.25,-12.5 311.25,-6.5 317.25,-0.5 323.25,-0.5"/>
-<text xml:space="preserve" text-anchor="middle" x="345.12" y="-40.7" font-family="Times,serif" font-size="14.00">value = 2</text>
-<text xml:space="preserve" text-anchor="middle" x="345.12" y="-24.2" font-family="Times,serif" font-size="14.00">prev = 2</text>
+<path fill="#a9062f" stroke="#a9062f" d="M323.25,-0.5C323.25,-0.5 367,-0.5 367,-0.5 373,-0.5 379,-6.5 379,-12.5 379,-12.5 379,-46 379,-46 379,-52 373,-58 367,-58 367,-58 323.25,-58 323.25,-58 317.25,-58 311.25,-52 311.25,-46 311.25,-46 311.25,-12.5 311.25,-12.5 311.25,-6.5 317.25,-0.5 323.25,-0.5"/>
+<text xml:space="preserve" text-anchor="middle" x="345.12" y="-40.7" font-family="Times,serif" font-size="14.00">value = 3</text>
+<text xml:space="preserve" text-anchor="middle" x="345.12" y="-24.2" font-family="Times,serif" font-size="14.00">prev = &#45;1</text>
 <text xml:space="preserve" text-anchor="middle" x="345.12" y="-7.7" font-family="Times,serif" font-size="14.00">next = 4</text>
 </g>
 <!-- n2&#45;&gt;n3 -->
 <!-- n2&#45;&gt;n3 -->
 <g id="edge9" class="edge">
 <title>n2&#45;&gt;n3</title>
-<path fill="none" stroke="#c8e6c9" d="M275.69,-35.63C283.32,-35.96 291.56,-36.07 299.58,-35.95"/>
-<polygon fill="#c8e6c9" stroke="#c8e6c9" points="299.67,-39.45 309.57,-35.66 299.47,-32.46 299.67,-39.45"/>
+<path fill="none" stroke="#a9062f" d="M275.69,-35.63C283.32,-35.96 291.56,-36.07 299.58,-35.95"/>
+<polygon fill="#a9062f" stroke="#a9062f" points="299.67,-39.45 309.57,-35.66 299.47,-32.46 299.67,-39.45"/>
 </g>
 <!-- n4 -->
 <g id="node5" class="node">
 <title>n4</title>
-<path fill="#c8e6c9" stroke="#c8e6c9" d="M427,-0.5C427,-0.5 470.75,-0.5 470.75,-0.5 476.75,-0.5 482.75,-6.5 482.75,-12.5 482.75,-12.5 482.75,-46 482.75,-46 482.75,-52 476.75,-58 470.75,-58 470.75,-58 427,-58 427,-58 421,-58 415,-52 415,-46 415,-46 415,-12.5 415,-12.5 415,-6.5 421,-0.5 427,-0.5"/>
-<text xml:space="preserve" text-anchor="middle" x="448.88" y="-40.7" font-family="Times,serif" font-size="14.00">value = 3</text>
+<path fill="#3ff407" stroke="#3ff407" d="M427,-0.5C427,-0.5 470.75,-0.5 470.75,-0.5 476.75,-0.5 482.75,-6.5 482.75,-12.5 482.75,-12.5 482.75,-46 482.75,-46 482.75,-52 476.75,-58 470.75,-58 470.75,-58 427,-58 427,-58 421,-58 415,-52 415,-46 415,-46 415,-12.5 415,-12.5 415,-6.5 421,-0.5 427,-0.5"/>
+<text xml:space="preserve" text-anchor="middle" x="448.88" y="-40.7" font-family="Times,serif" font-size="14.00">value = 4</text>
 <text xml:space="preserve" text-anchor="middle" x="448.88" y="-24.2" font-family="Times,serif" font-size="14.00">prev = 3</text>
 <text xml:space="preserve" text-anchor="middle" x="448.88" y="-7.7" font-family="Times,serif" font-size="14.00">next = 5</text>
 </g>
@@ -67,14 +67,14 @@
 <!-- n3&#45;&gt;n4 -->
 <g id="edge10" class="edge">
 <title>n3&#45;&gt;n4</title>
-<path fill="none" stroke="#c8e6c9" d="M379.44,-35.63C387.07,-35.96 395.31,-36.07 403.33,-35.95"/>
-<polygon fill="#c8e6c9" stroke="#c8e6c9" points="403.42,-39.45 413.32,-35.66 403.22,-32.46 403.42,-39.45"/>
+<path fill="none" stroke="#a9062f" d="M379.44,-35.63C387.07,-35.96 395.31,-36.07 403.33,-35.95"/>
+<polygon fill="#a9062f" stroke="#a9062f" points="403.42,-39.45 413.32,-35.66 403.22,-32.46 403.42,-39.45"/>
 </g>
 <!-- n5 -->
 <g id="node6" class="node">
 <title>n5</title>
-<path fill="lightblue" stroke="lightblue" d="M530.75,-0.5C530.75,-0.5 574.5,-0.5 574.5,-0.5 580.5,-0.5 586.5,-6.5 586.5,-12.5 586.5,-12.5 586.5,-46 586.5,-46 586.5,-52 580.5,-58 574.5,-58 574.5,-58 530.75,-58 530.75,-58 524.75,-58 518.75,-52 518.75,-46 518.75,-46 518.75,-12.5 518.75,-12.5 518.75,-6.5 524.75,-0.5 530.75,-0.5"/>
-<text xml:space="preserve" text-anchor="middle" x="552.62" y="-40.7" font-family="Times,serif" font-size="14.00">value = 4</text>
+<path fill="#00c6c9" stroke="#00c6c9" d="M530.75,-0.5C530.75,-0.5 574.5,-0.5 574.5,-0.5 580.5,-0.5 586.5,-6.5 586.5,-12.5 586.5,-12.5 586.5,-46 586.5,-46 586.5,-52 580.5,-58 574.5,-58 574.5,-58 530.75,-58 530.75,-58 524.75,-58 518.75,-52 518.75,-46 518.75,-46 518.75,-12.5 518.75,-12.5 518.75,-6.5 524.75,-0.5 530.75,-0.5"/>
+<text xml:space="preserve" text-anchor="middle" x="552.62" y="-40.7" font-family="Times,serif" font-size="14.00">value = 5</text>
 <text xml:space="preserve" text-anchor="middle" x="552.62" y="-24.2" font-family="Times,serif" font-size="14.00">prev = 4</text>
 <text xml:space="preserve" text-anchor="middle" x="552.62" y="-7.7" font-family="Times,serif" font-size="14.00">next = 0</text>
 </g>
@@ -82,13 +82,13 @@
 <!-- n4&#45;&gt;n5 -->
 <g id="edge11" class="edge">
 <title>n4&#45;&gt;n5</title>
-<path fill="none" stroke="#c8e6c9" d="M483.19,-35.63C490.82,-35.96 499.06,-36.07 507.08,-35.95"/>
-<polygon fill="#c8e6c9" stroke="#c8e6c9" points="507.17,-39.45 517.07,-35.66 506.97,-32.46 507.17,-39.45"/>
+<path fill="none" stroke="#3ff407" d="M483.19,-35.63C490.82,-35.96 499.06,-36.07 507.08,-35.95"/>
+<polygon fill="#3ff407" stroke="#3ff407" points="507.17,-39.45 517.07,-35.66 506.97,-32.46 507.17,-39.45"/>
 </g>
 <!-- n6 -->
 <g id="node7" class="node">
 <title>n6</title>
-<path fill="lightgray" stroke="lightgray" d="M634.5,-0.5C634.5,-0.5 678.25,-0.5 678.25,-0.5 684.25,-0.5 690.25,-6.5 690.25,-12.5 690.25,-12.5 690.25,-46 690.25,-46 690.25,-52 684.25,-58 678.25,-58 678.25,-58 634.5,-58 634.5,-58 628.5,-58 622.5,-52 622.5,-46 622.5,-46 622.5,-12.5 622.5,-12.5 622.5,-6.5 628.5,-0.5 634.5,-0.5"/>
+<path fill="#9781db" stroke="#9781db" d="M634.5,-0.5C634.5,-0.5 678.25,-0.5 678.25,-0.5 684.25,-0.5 690.25,-6.5 690.25,-12.5 690.25,-12.5 690.25,-46 690.25,-46 690.25,-52 684.25,-58 678.25,-58 678.25,-58 634.5,-58 634.5,-58 628.5,-58 622.5,-52 622.5,-46 622.5,-46 622.5,-12.5 622.5,-12.5 622.5,-6.5 628.5,-0.5 634.5,-0.5"/>
 <text xml:space="preserve" text-anchor="middle" x="656.38" y="-40.7" font-family="Times,serif" font-size="14.00">value = 0</text>
 <text xml:space="preserve" text-anchor="middle" x="656.38" y="-24.2" font-family="Times,serif" font-size="14.00">prev = &#45;1</text>
 <text xml:space="preserve" text-anchor="middle" x="656.38" y="-7.7" font-family="Times,serif" font-size="14.00">next = 7</text>
@@ -97,11 +97,17 @@
 <!-- n7 -->
 <g id="node8" class="node">
 <title>n7</title>
-<path fill="lightgray" stroke="lightgray" d="M738.25,-0.5C738.25,-0.5 782,-0.5 782,-0.5 788,-0.5 794,-6.5 794,-12.5 794,-12.5 794,-46 794,-46 794,-52 788,-58 782,-58 782,-58 738.25,-58 738.25,-58 732.25,-58 726.25,-52 726.25,-46 726.25,-46 726.25,-12.5 726.25,-12.5 726.25,-6.5 732.25,-0.5 738.25,-0.5"/>
+<path fill="#9781db" stroke="#9781db" d="M738.25,-0.5C738.25,-0.5 782,-0.5 782,-0.5 788,-0.5 794,-6.5 794,-12.5 794,-12.5 794,-46 794,-46 794,-52 788,-58 782,-58 782,-58 738.25,-58 738.25,-58 732.25,-58 726.25,-52 726.25,-46 726.25,-46 726.25,-12.5 726.25,-12.5 726.25,-6.5 732.25,-0.5 738.25,-0.5"/>
 <text xml:space="preserve" text-anchor="middle" x="760.12" y="-40.7" font-family="Times,serif" font-size="14.00">value = 0</text>
 <text xml:space="preserve" text-anchor="middle" x="760.12" y="-24.2" font-family="Times,serif" font-size="14.00">prev = &#45;1</text>
 <text xml:space="preserve" text-anchor="middle" x="760.12" y="-7.7" font-family="Times,serif" font-size="14.00">next = 0</text>
 </g>
 <!-- n6&#45;&gt;n7 -->
+<!-- n6&#45;&gt;n7 -->
+<g id="edge12" class="edge">
+<title>n6&#45;&gt;n7</title>
+<path fill="none" stroke="#9781db" d="M690.69,-35.63C698.32,-35.96 706.56,-36.07 714.58,-35.95"/>
+<polygon fill="#9781db" stroke="#9781db" points="714.67,-39.45 724.57,-35.66 714.47,-32.46 714.67,-39.45"/>
+</g>
 </g>
 </svg>

@@ -4,6 +4,7 @@
 
 #include "../list/list_config.h"
 #include "log.h"
+#include "colours.h"
 
 
 static size_t dump_id = 0;
@@ -16,16 +17,21 @@ dump_color ( list_man* list, int index, FILE* img )
     assert( list );
     assert( img );
 
+    if ( list->status[ 0 ].fatal )
+        return;
+
     fprintf( img, "style = filled, " );
 
-    if ( !index )
-        fprintf( img, "color = lightyellow ]\n" );
+    if ( *( ( char* ) list->status + index ) && index )
+        fprintf( img, "color = \"#a9062f\" ]\n" );
+    else if ( !index )
+        fprintf( img, "color = \"#b4da08\" ]\n" );
     else if ( index == list->data[ 0 ].next || index == list->data[ 0 ].prev )
-        fprintf( img, "color = lightblue ]\n" );
+        fprintf( img, "color = \"#00c6c9\" ]\n" );
     else if ( list->data[ index ].prev == -1 )
-        fprintf( img, "color = lightgray ]\n" );
+        fprintf( img, "color = \"#9781db\" ]\n" );
     else
-        fprintf( img, "color = \"#C8E6C9\" ]\n" );
+        fprintf( img, "color = \"#3ff407\" ]\n" );
 }
 
 
@@ -34,6 +40,10 @@ dump_elems ( list_man* list, FILE* img )
 {
     assert( list );
     assert( img );
+
+    if ( list->status[ 0 ].fatal )
+        return;
+
     for ( int index = 0; index < list->capacity; index++ )
     {
         fprintf( img, "n%d [ label = \"value = %lld\\nprev = %d\\nnext = %d\", "
@@ -61,14 +71,12 @@ dump_seq ( list_man* list, FILE* img )
     assert( list );
     assert( img );
 
-    int elem = list->data[ 0 ].next;
-
-    while ( list->data[ elem ].next )
-    {
-        fprintf( img, "n%d -> n%d [", elem, list->data[ elem ].next );
-        dump_color( list, elem, img );
-        elem = list->data[ elem ].next;
-    }
+    for ( int i = 1; i < list->capacity; i++ )
+        if ( !list->status[ i ].fatal && list->data[ i ].next )
+        {
+            fprintf( img, "n%d -> n%d [", i, list->data[ i ].next );
+            dump_color( list, i, img );
+        }
 }
 
 
@@ -91,6 +99,17 @@ logger_inc ( void )
 
 
 void
+status_clean( list_man* list )
+{
+    assert( list );
+
+    for ( int i = 0; i < list->capacity; i++ )
+        *( ( char* ) list->status + i ) = 0;
+
+}
+
+
+void
 dump_dot ( list_man* list )
 {
     assert( list );
@@ -106,6 +125,12 @@ dump_dot ( list_man* list )
     FILE* img = fopen( dot_path, "w" );
 
     //---------Dumping--------------
+
+    if ( list->status[ 0 ].fatal )
+    {
+        printlg( RED "Cannot paint graph for the fatal fault of programm.</p>\n\n" );
+        return;
+    }
 
     fprintf( img, "digraph {\n"
                   "rankdir = LR\n" );
@@ -123,4 +148,6 @@ dump_dot ( list_man* list )
     convert_svg();
 
     logger_inc();
+
+    status_clean( list );
 }

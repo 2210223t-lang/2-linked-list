@@ -6,6 +6,13 @@
 #include "debug/log.h"
 
 
+void
+pollute ( list_man* list )
+{
+    list->data[ 3 ].prev = -1;
+}
+
+
 int
 main ( void )
 {
@@ -14,12 +21,12 @@ main ( void )
     list_init( &list );
 
 
-    for ( int i = 0; i < 5; i++ )
+    for ( int i = 1; i <= 4; i++ )
         list_pushb( &list, i );
 
-    list_extr( &list, 4 );
+    pollute( &list );
 
-    dump_dot( &list );
+    list_pushb( &list, 5 );
 
     logger_close();
     return 0;
