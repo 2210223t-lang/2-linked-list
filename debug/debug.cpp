@@ -81,6 +81,13 @@ data_plausibility ( list_man* list )
 
             list->status[ i ].fatal = true;
         }
+        if ( list->data[ i ].num != i )
+        {
+            printlg( RED "---| Detected data inplausibility |---\n\n"
+                         "Check %d elem num value.\n"
+                         "--------------------------------------</p>\n\n", i );
+            list->status[ i ].nel = true;
+        }
 
     }
 }

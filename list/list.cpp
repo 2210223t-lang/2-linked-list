@@ -34,10 +34,10 @@ list_init ( list_man* list )
     list->capacity = MIN_LIST_SIZE;
     list->free = 1;
 
-    list->data[ 0 ] = { .value = 0, .prev = 0, .next = 0 };
+    list->data[ 0 ] = { .value = 0, .prev = 0, .next = 0, .num = 0 };
 
     for ( int i = 1; i < MIN_LIST_SIZE; i++ )
-        list->data[ i ] = { .value = 0, .prev = -1, .next = ( i + 1 ) % MIN_LIST_SIZE };
+        list->data[ i ] = { .value = 0, .prev = -1, .next = ( i + 1 ) % MIN_LIST_SIZE, .num = i };
 
 
     printlg( "Init result:\n\n" );
@@ -99,7 +99,7 @@ reall_list ( list_man* list )
     for ( int j = list->free; j < list->capacity; j++ )
     {
         *( ( char* ) list->status + j ) = 0;
-        list->data[ j ] = { .value = 0, .prev = -1, .next = ( j + 1 ) % list->capacity };
+        list->data[ j ] = { .value = 0, .prev = -1, .next = ( j + 1 ) % list->capacity, .num = j };
     }
 
     return Success;
@@ -131,7 +131,7 @@ list_add ( list_man* list, int num, int value )
 
     if ( list->data[ num ].prev == -1 )
     {
-        printlg( RED "invalid element number.\n"
+        printlg( RED "Invalid element number.\n"
                      "Previous element isn't initialized. Number: %d</p>\n\n", num );
         list->status[ 0 ].fatal = true;
         return Failure;
@@ -139,7 +139,7 @@ list_add ( list_man* list, int num, int value )
 
     int buff = list->data[ list->free ].next;
 
-    list->data[ list->free ] = { .value = value, .prev = num, .next = list->data[ num ].next };
+    list->data[ list->free ] = { .value = value, .prev = num, .next = list->data[ num ].next, .num = list->free };
     list->data[ num ].next = list->free;
     list->data[ list->data[ list->free ].next ].prev = list->free;
     list->free = buff;

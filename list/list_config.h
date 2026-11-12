@@ -21,6 +21,7 @@ list_elem
     list_data value;
     int prev;
     int next;
+    int num;
 };
 
 
@@ -31,7 +32,8 @@ elem_stat
     char datainc :1; //< Data's inconsistency
     char fatal   :1; //< Fatal fault ( avoid printing )
     char freefal :1; //< Free value fault
-    char freespac:4;
+    char nel     :1; //< neligible mis
+    char freespac:3;
 };
 
 struct

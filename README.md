@@ -39,7 +39,7 @@ The repository contain 2-linked list realisation, equiped by a powerful debuggin
 |
 ├── list <--- Contains list functions
 |   |
-|   ├── list_config    <--- List settings
+|   ├── list_config <--- List settings
 |   |
 |   ├── list.h <--- Main list func
 |   └── list.cpp
@@ -47,7 +47,7 @@ The repository contain 2-linked list realisation, equiped by a powerful debuggin
 |
 ├── debug <--- Debugging functions
 |   |
-|   ├── colours.h
+|   ├── colours.h <--- Colours-putput defines
 |   |
 |   ├── debug.h <--- Verifier
 |   ├── debug.cpp

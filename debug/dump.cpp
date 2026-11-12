@@ -22,7 +22,7 @@ dump_color ( list_man* list, int index, FILE* img )
 
     fprintf( img, "style = filled, " );
 
-    if ( *( ( char* ) list->status + index ) && index )
+    if ( *( ( char* ) list->status + index ) - list->status[ index ].nel && index  )
         fprintf( img, "color = \"#a9062f\" ]\n" );
     else if ( !index )
         fprintf( img, "color = \"#b4da08\" ]\n" );
@@ -46,9 +46,10 @@ dump_elems ( list_man* list, FILE* img )
 
     for ( int index = 0; index < list->capacity; index++ )
     {
-        fprintf( img, "n%d [ label = \"value = %lld\\nprev = %d\\nnext = %d\", "
+        fprintf( img, "n%d [ label = \"number = %d\\nvalue = %lld\\nprev = %d\\nnext = %d\", "
                       "shape = Mrecord, fontsize = 14,",
-                       index, list->data[ index ].value, list->data[ index ].prev, list->data[ index ].next );
+                       index, list->data[ index ].num,
+                       list->data[ index ].value, list->data[ index ].prev, list->data[ index ].next );
         dump_color( list, index, img );
     }
 }
@@ -119,8 +120,8 @@ print_meta ( list_man* list )
                  "Free value: %d\n"
                  "Head: %d\n"
                  "Tail: %d</p>\n",
-                 list->capacity, list->free, list->data[ 0 ].next, list->data[ 0 ].prev );
-
+                 list->capacity, list->free,
+                 list->data[ 0 ].next, list->data[ 0 ].prev );
 }
 
 
@@ -166,7 +167,7 @@ dump_dot ( list_man* list )
 
     logger_inc();
 
-    printlg( "==================================\n\n\n" );
+    printlg( "<hr>\n" );
 
     status_clean( list );
 }
