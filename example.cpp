@@ -9,7 +9,7 @@
 void
 pollute ( list_man* list )
 {
-    list->data[ 3 ].prev = -1;
+    list->free = -1;
 }
 
 

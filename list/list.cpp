@@ -13,13 +13,10 @@ static int c = 0;
 
 
 
-
 ListError
 list_init ( list_man* list )
 {
     assert( list );
-
-    fprintf( stderr, "Initializing.\n\n" );
 
     list->data   = ( list_elem* ) calloc( MIN_LIST_SIZE, sizeof( list_elem ) );
     list->status = ( elem_stat* ) calloc( MIN_LIST_SIZE, sizeof( elem_stat ) );
@@ -114,7 +111,15 @@ list_add ( list_man* list, int num, int value )
 {
     assert( list );
 
-    if ( list->status[ 0 ].fatal )
+    printlg( BLU "Adding new elem result:</p>\n\n" );
+    verify( list );
+
+    if ( list->status[ 0 ].freefal )
+    {
+        dump_dot( list );
+        return Failure;
+    }
+    else if ( list->status[ 0 ].fatal )
         return Failure;
 
     if ( !list->free )
@@ -139,7 +144,6 @@ list_add ( list_man* list, int num, int value )
     list->data[ list->data[ list->free ].next ].prev = list->free;
     list->free = buff;
 
-    printlg( BLU "Adding new elem result:</p>\n\n" );
     verify( list );
     dump_dot( list );
 
@@ -152,7 +156,15 @@ list_pushb ( list_man* list, int value )
 {
     assert( list );
 
-    if ( list->status[ 0 ].fatal )
+    verify( list );
+
+
+    if ( list->status[ 0 ].freefal )
+    {
+        dump_dot( list );
+        return Failure;
+    }
+    else if ( list->status[ 0 ].fatal )
         return Failure;
 
     return list_add( list, list->data[ 0 ].prev, value );
@@ -163,6 +175,9 @@ ListError
 list_extr ( list_man* list, int num )
 {
     assert( list );
+
+    printlg( BLU "Extracting result:</p>\n\n" );
+    verify( list );
 
     if ( list->status[ 0 ].fatal )
         return Failure;
@@ -195,8 +210,6 @@ list_extr ( list_man* list, int num )
     list->data[ num ] = { .value = 0, .prev = -1, .next = list->free };
     list->free = num;
 
-    printlg( BLU "Extracting result:</p>\n\n" );
-    verify( list );
     dump_dot( list );
 
     return Success;

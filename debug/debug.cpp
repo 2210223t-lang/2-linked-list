@@ -57,7 +57,7 @@ data_plausibility ( list_man* list )
                      "--------------------------</p>\n\n", list->capacity );
         list->status[ 0 ].fatal = true;
     }
-    else if ( list->free >= list->capacity )
+    else if ( list->free >= list->capacity || list->free < 0 )
     {
         printlg( RED "---| Failure detected |---\n\n"
                      "Incorrect list->free value: %d.\n"
@@ -94,5 +94,4 @@ verify ( list_man* list )
     data_plausibility( list );
 
     list_consist( list );
-
 }
