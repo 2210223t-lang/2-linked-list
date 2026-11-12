@@ -9,6 +9,30 @@
 
 
 void
+assert_my( list_man* list )
+{
+    assert( list );
+
+    bool stat = true;
+
+    if ( !list->status )
+    {
+        printlg( RED "List->status null pointer.</p>\n\n" );
+        stat = false;
+    }
+    if ( !list->data )
+    {
+        printlg( RED "List->data null pointer.</p>\n\n" );
+        stat = false;
+    }
+
+    if ( !stat )
+        abort();
+}
+
+
+
+void
 list_consist ( list_man* list )
 {
     assert( list );
@@ -25,7 +49,7 @@ list_consist ( list_man* list )
                          "From next elem: [%d] --> [%d] --> [%d]\n"
                          "------------------------------------------------</p>\n\n",
                          index, index, list->data[ index ].prev, index, list->data[ index ].next,
-                         list->data[ list->data[ index ].prev ].prev, list->data[ index ].next, list->data[ list->data[ index ].prev ].next );
+                         list->data[ list->data[ index ].next ].prev, list->data[ index ].next, list->data[ list->data[ index ].next ].next );
             list->status[ index ].seqfal = true;
             list->status[ 0 ].seqfal = true;
         }
@@ -97,6 +121,7 @@ void
 verify ( list_man* list )
 {
     assert( list );
+    assert_my( list );
 
     data_plausibility( list );
 

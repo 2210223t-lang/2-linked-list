@@ -41,7 +41,6 @@ list_init ( list_man* list )
 
 
     printlg( "Init result:\n\n" );
-    verify( list );
     dump_dot( list );
 
     return Success;
@@ -144,7 +143,6 @@ list_add ( list_man* list, int num, int value )
     list->data[ list->data[ list->free ].next ].prev = list->free;
     list->free = buff;
 
-    verify( list );
     dump_dot( list );
 
     return list->data[ num ].next;
@@ -182,11 +180,16 @@ list_extr ( list_man* list, int num )
     if ( list->status[ 0 ].fatal )
         return Failure;
 
-    if ( list->data[ num ].prev == -1 )
+    if ( list->data[ num ].prev == -1 || num <= 0 || num >= list->capacity )
     {
-        printlg( "invalid extraction number.\n"
-                 "This element wasn't initialized.\n\n" );
+        printlg( RED "---| Invalid extraction number |---\n"
+                     "This element wasn't initialized.\n"
+                     "Extraction num: %d\n"
+                     "Capacity: %d\n"
+                     "===================================</p>\n\n",
+                     num, list->capacity );
 
+        dump_dot( list );
         list->status[ 0 ].fatal = true;
         return Failure;
     }
@@ -207,7 +210,7 @@ list_extr ( list_man* list, int num )
     list->data[ list->data[ num ].prev ].next = list->data[ num ].next;
     list->data[ list->data[ num ].next ].prev = list->data[ num ].prev;
 
-    list->data[ num ] = { .value = 0, .prev = -1, .next = list->free };
+    list->data[ num ] = { .value = 0, .prev = -1, .next = list->free, .num = num };
     list->free = num;
 
     dump_dot( list );

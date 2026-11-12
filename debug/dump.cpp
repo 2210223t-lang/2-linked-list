@@ -22,7 +22,8 @@ dump_color ( list_man* list, int index, FILE* img )
 
     fprintf( img, "style = filled, " );
 
-    if ( *( ( char* ) list->status + index ) - list->status[ index ].nel && index  )
+    if ( list->status[ index ].datainc + list->status[ index ].freefal +
+         list->status[ index ].seqfal  + list->status[ index ].fatal && index  )
         fprintf( img, "color = \"#a9062f\" ]\n" );
     else if ( !index )
         fprintf( img, "color = \"#b4da08\" ]\n" );
