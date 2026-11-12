@@ -12,12 +12,23 @@
 The repository contain 2-linked list realisation, equiped by a powerful debugging html - output system.
 
 ## Main functions
-
+```
 1. list_pushb <--- Pushes into the end of the sequence
 2. list_init  <--- Initializes list struct
 3. list_destr <--- Destroys list struct
 4. list_add   <--- Adds after chosen element
+```
 
+## Debugging meaning
+```
+ RED - symbolizes error
+
+ BLUE - head or tail
+
+ GREEN - list active elem
+
+ PURPLE - free elem
+```
 ### Repo structure
 
 ```
