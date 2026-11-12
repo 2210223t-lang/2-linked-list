@@ -116,8 +116,10 @@ print_meta ( list_man* list )
 
     printlg( BLU "\n\n===| List metadata |===\n"
                  "Capacity value: %d\n"
-                 "Free value: %d</p>\n",
-                 list->capacity, list->free );
+                 "Free value: %d\n"
+                 "Head: %d\n"
+                 "Tail: %d</p>\n",
+                 list->capacity, list->free, list->data[ 0 ].next, list->data[ 0 ].prev );
 
 }
 
