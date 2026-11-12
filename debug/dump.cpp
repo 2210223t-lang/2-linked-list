@@ -110,6 +110,19 @@ status_clean( list_man* list )
 
 
 void
+print_meta ( list_man* list )
+{
+    assert( list );
+
+    printlg( BLU "\n\n===| List metadata |===\n"
+                 "Capacity value: %d\n"
+                 "Free value: %d</p>\n",
+                 list->capacity, list->free );
+
+}
+
+
+void
 dump_dot ( list_man* list )
 {
     assert( list );
@@ -147,7 +160,11 @@ dump_dot ( list_man* list )
 
     convert_svg();
 
+    print_meta( list );
+
     logger_inc();
+
+    printlg( "==================================\n\n\n" );
 
     status_clean( list );
 }
