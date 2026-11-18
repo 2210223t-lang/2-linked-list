@@ -16,16 +16,6 @@ ListError
 };
 
 struct
-list_elem
-{
-    list_data value;
-    int prev;
-    int next;
-    int num;
-};
-
-
-struct
 elem_stat
 {
     char seqfal  :1; //< Sequence fault
@@ -33,8 +23,21 @@ elem_stat
     char fatal   :1; //< Fatal fault ( avoid printing )
     char freefal :1; //< Free value fault
     char nel     :1; //< neligible mis
-    char freespac:3;
+    char hashfal :1;
+    char freespac:2;
 };
+
+struct
+list_elem
+{
+    list_data value;
+    int prev;
+    int next;
+    int num;
+    elem_stat stat;
+    uint32_t hash;
+};
+
 
 struct
 list_man
@@ -42,5 +45,4 @@ list_man
     list_elem* data;
     int capacity;
     int free;
-    elem_stat* status;
 };

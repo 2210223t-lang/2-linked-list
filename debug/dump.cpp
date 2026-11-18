@@ -9,28 +9,86 @@
 
 static size_t dump_id = 0;
 
+#define PREV list->data[ index ].prev
+#define NEXT list->data[ index ].next
 
 
-void
-dump_color ( list_man* list, int index, FILE* img )
+
+static int
+find_prev ( list_man* list, int index_find )
+{
+    assert( list );
+
+    for ( int index = 1; index < list->capacity; index++ )
+        if ( !list->data[ index ].stat.hashfal && PREV == index_find )
+            return index;
+
+    return -1;
+}
+
+
+static ListError
+sequ_check ( list_man* list, int index, FILE* img )
 {
     assert( list );
     assert( img );
 
-    if ( list->status[ 0 ].fatal )
+    int temp = -1;
+
+    if ( index != list->data[ NEXT ].prev && PREV && PREV != -1 )
+    {
+        fprintf( img, "n%d -> n%d [ ", index, list->data[ index ].next );
+            if ( list->data[ index ].stat.hashfal )
+            {
+                temp = find_prev( list, index );
+                fprintf( img, "color = \"#f9003e\" ]\n" );
+                if ( temp != -1 )
+                    fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", index, temp );
+                return Failure;
+            }
+
+            if ( !list->data[ index ].stat.hashfal && !list->data[ NEXT ].stat.hashfal )
+            {
+                temp = find_prev( list, index );
+                fprintf( img, "color = \"#f9003e\" ]\n" );
+            }
+            else if ( list->data[ NEXT ].stat.hashfal )
+                fprintf( img, "color = \"#3ff407\" ]\n" );
+
+            if ( list->data[NEXT].prev >= 0 && list->data[NEXT].prev < list->capacity )
+                fprintf(img, "n%d -> n%d [color=\"#f9003e\"]\n", NEXT, list->data[NEXT].prev );
+            else
+                fprintf( img, "n%d -> out [ color = \"#f9003e\"]\n", NEXT );
+
+            if ( temp != -1 && !list->data[ index ].stat.hashfal && !list->data[ NEXT ].stat.hashfal )
+                    fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", index, temp );
+
+        return Failure;
+    }
+    return Success;
+}
+
+
+void
+dump_colour ( list_man* list, int index, FILE* img, bool is_node )
+{
+    assert( list );
+    assert( img );
+
+    if ( list->data[0].stat.fatal )
         return;
 
     fprintf( img, "style = filled, " );
 
-    if ( list->status[ index ].datainc + list->status[ index ].freefal +
-         list->status[ index ].seqfal  + list->status[ index ].fatal && index  )
-        fprintf( img, "color = \"#a9062f\" ]\n" );
+    if ( list->data[ index ].stat.datainc + list->data[ index ].stat.freefal + list->data[ index ].stat.seqfal +
+        list->data[ index ].stat.fatal + list->data[ index ].stat.hashfal && index && is_node )
+        fprintf( img, "color = \"#f9003e\", fontcolor = \"#fffbfb\" ]\n" );
     else if ( !index )
         fprintf( img, "color = \"#b4da08\" ]\n" );
     else if ( index == list->data[ 0 ].next || index == list->data[ 0 ].prev )
         fprintf( img, "color = \"#00c6c9\" ]\n" );
     else if ( list->data[ index ].prev == -1 )
-        fprintf( img, "color = \"#9781db\" ]\n" );
+        fprintf( img, "color = \"#6c6c6c\" ]\n" );
     else
         fprintf( img, "color = \"#3ff407\" ]\n" );
 }
@@ -42,7 +100,7 @@ dump_elems ( list_man* list, FILE* img )
     assert( list );
     assert( img );
 
-    if ( list->status[ 0 ].fatal )
+    if ( list->data[ 0 ].stat.fatal )
         return;
 
     for ( int index = 0; index < list->capacity; index++ )
@@ -50,9 +108,12 @@ dump_elems ( list_man* list, FILE* img )
         fprintf( img, "n%d [ label = \"number = %d\\nvalue = %lld\\nprev = %d\\nnext = %d\", "
                       "shape = Mrecord, fontsize = 14,",
                        index, list->data[ index ].num,
-                       list->data[ index ].value, list->data[ index ].prev, list->data[ index ].next );
-        dump_color( list, index, img );
+                       list->data[ index ].value, PREV, NEXT );
+        dump_colour( list, index, img, true );
     }
+
+    if ( list->data[ 0 ].stat.hashfal )
+        fprintf( img, "out [ label = \"OUT of array\", shape = Mrecord, fontsize = 14, style = filled, color = \"#f9003e\", fontcolor = \"#fffbfb\" ]\n " );
 }
 
 
@@ -63,7 +124,7 @@ dump_prep ( list_man* list, FILE* img )
     assert( img );
 
     for ( int i = 1; i < list->capacity; i++ )
-        fprintf( img, "n%d -> n%d [ style = invis, weight = 100 ]\n", i - 1, i );
+        fprintf( img, "n%d -> n%d [ style = invis, weight = 10000 ]\n", i - 1, i );
 }
 
 
@@ -73,12 +134,17 @@ dump_seq ( list_man* list, FILE* img )
     assert( list );
     assert( img );
 
-    for ( int i = 1; i < list->capacity; i++ )
-        if ( !list->status[ i ].fatal && list->data[ i ].next )
-        {
-            fprintf( img, "n%d -> n%d [", i, list->data[ i ].next );
-            dump_color( list, i, img );
-        }
+    for ( int index = 1; index < list->capacity; index++ )
+    {
+        if ( NEXT >= list->capacity || NEXT < 0 || ( PREV < 0 && PREV != -1 ) )
+            fprintf( img, "n%d -> out [ color = \"#f9003e\" ]\n", index );
+        else if ( sequ_check( list, index, img ) == Success )
+            if ( NEXT )
+            {
+                fprintf( img, "n%d -> n%d [ ", index, NEXT );
+                dump_colour( list, index, img, false );
+            }
+    }
 }
 
 
@@ -106,7 +172,7 @@ status_clean( list_man* list )
     assert( list );
 
     for ( int i = 0; i < list->capacity; i++ )
-        *( ( char* ) list->status + i ) = 0;
+        *( ( char* ) &list->data[ i ].stat ) = 0;
 
 }
 
@@ -132,7 +198,6 @@ dump_dot ( list_man* list )
     assert( list );
 
     //---------Preparations-----------
-
     dump_id++;
 
     char dot_path[ PATH_MAX ] = "";
@@ -143,7 +208,7 @@ dump_dot ( list_man* list )
 
     //---------Dumping--------------
 
-    if ( list->status[ 0 ].fatal )
+    if ( list->data[ 0 ].stat.fatal )
     {
         printlg( RED "Cannot paint graph for the fatal fault of programm.</p>\n\n" );
         return;
@@ -153,21 +218,15 @@ dump_dot ( list_man* list )
                   "rankdir = LR\n" );
 
     dump_elems( list, img );
-
     dump_prep( list, img );
-
     dump_seq( list, img );
 
     fprintf( img, "}\n" );
 
     fclose( img );
-
     convert_svg();
-
     print_meta( list );
-
     logger_inc();
-
     printlg( "<hr>\n" );
 
     status_clean( list );

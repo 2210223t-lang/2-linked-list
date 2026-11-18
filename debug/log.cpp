@@ -5,7 +5,8 @@
 
 #include "log.h"
 
-static FILE* logger_stream = stderr;//< Standard stream, which will be used if user didn't used logger_open
+static FILE* logger_stream = stderr; //< Standard stream, which will be used if user didn't used logger_open
+
 
 
 /**

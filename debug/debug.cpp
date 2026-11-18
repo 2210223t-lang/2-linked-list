@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -8,18 +9,52 @@
 
 
 
+/**
+ * @brief Standard djb2 hashing function
+ */
+static uint32_t
+hash_djb2 ( unsigned char *str, size_t size )
+{
+    uint32_t hash = 5381;
+
+    for ( size_t i = 0; i < size; i++ )
+        hash = ( ( hash << 5 ) + hash ) + *( str++ ); /* hash * 33 + c */
+
+    return hash;
+}
+
+
+static uint32_t
+hash_calc ( list_elem* elem )
+{
+    assert( elem );
+
+    uint32_t hash = hash_djb2( ( unsigned char* ) &elem->next, sizeof( elem->next ) );
+    hash += hash_djb2( ( unsigned char* ) &elem->prev,  sizeof ( elem->prev  ) );
+    hash += hash_djb2( ( unsigned char* ) &elem->value, sizeof ( elem->value ) );
+
+    return hash;
+}
+
+
 void
+hash_fill ( list_man* list )
+{
+    assert( list );
+    assert( list );
+
+    for ( int i = 1; i < list->capacity; i++ )
+        list->data[ i ].hash = hash_calc( list->data + i );
+}
+
+
+static void
 assert_my( list_man* list )
 {
     assert( list );
 
     bool stat = true;
 
-    if ( !list->status )
-    {
-        printlg( RED "List->status null pointer.</p>\n\n" );
-        stat = false;
-    }
     if ( !list->data )
     {
         printlg( RED "List->data null pointer.</p>\n\n" );
@@ -32,16 +67,16 @@ assert_my( list_man* list )
 
 
 
-void
+static void
 list_consist ( list_man* list )
 {
     assert( list );
 
-    if ( list->status[ 0 ].fatal )
+    if ( list->data[0].stat.fatal )
         return;
 
     for ( int index = 0; index < list->capacity; index++ )
-        if ( list->data[ index ].next !=  0 && !list->status[ index ].fatal &&
+        if ( list->data[ index ].next !=  0 && !list->data[ index ].stat.fatal &&
              list->data[ index ].prev != -1 && index != list->data[ list->data[ index ].next ].prev )
         {
             printlg( RED "---| Detected list inconsistency in %d elem |---\n\n"
@@ -50,10 +85,10 @@ list_consist ( list_man* list )
                          "------------------------------------------------</p>\n\n",
                          index, index, list->data[ index ].prev, index, list->data[ index ].next,
                          list->data[ list->data[ index ].next ].prev, list->data[ index ].next, list->data[ list->data[ index ].next ].next );
-            list->status[ index ].seqfal = true;
-            list->status[ 0 ].seqfal = true;
+            list->data[ index ].stat.seqfal = true;
+            list->data[0].stat.seqfal = true;
         }
-        else if ( list->data[ index ].next !=  0 && !list->status[ index ].fatal &&
+        else if ( list->data[ index ].next !=  0 && !list->data[ index ].stat.fatal &&
                   list->data[ index ].prev == -1 && -1 != list->data[ list->data[ index ].next ].prev )
         {
             printlg( RED "---| Detected free elem list inconsistensy |---\n\n"
@@ -63,13 +98,13 @@ list_consist ( list_man* list )
                          index, index, list->data[ index ].next, list->data[ index ].next,
                          list->data[ list->data[ index ].next ].prev );
 
-            list->status[ index ].seqfal = true;
-            list->status[ 0 ].seqfal = true;
+            list->data[ index ].stat.seqfal = true;
+            list->data[0].stat.seqfal = true;
         }
 }
 
 
-void
+static void
 data_plausibility ( list_man* list )
 {
     assert( list );
@@ -79,7 +114,7 @@ data_plausibility ( list_man* list )
         printlg( RED "---| Failure detected |---\n\n"
                      "Negative capacity value: %d.\n"
                      "--------------------------</p>\n\n", list->capacity );
-        list->status[ 0 ].fatal = true;
+        list->data[0].stat.fatal = true;
     }
     else if ( list->free >= list->capacity || list->free < 0 )
     {
@@ -87,14 +122,14 @@ data_plausibility ( list_man* list )
                      "Incorrect list->free value: %d.\n"
                      "While capacity value: %d.\n"
                      "--------------------------</p>\n\n", list->free, list->capacity );
-        list->status[ 0 ].freefal = true;
+        list->data[0].stat.freefal = true;
     }
 
 
-    if ( list->status[ 0 ].fatal )
+    if ( list->data[0].stat.fatal )
         return;
 
-    for ( int i = 1; i < list->capacity; i++ )
+    for ( int i = 0; i < list->capacity; i++ )
     {
         if ( list->data[ i ].prev < -1 || list->data[ i ].prev >= list->capacity ||
              list->data[ i ].next <  0 || list->data[ i ].next >= list->capacity )
@@ -103,17 +138,39 @@ data_plausibility ( list_man* list )
                          "Check %d elem prev/next value.\n"
                          "--------------------------------------</p>\n\n", i );
 
-            list->status[ i ].fatal = true;
+            list->data[0].stat.fatal = true;
         }
         if ( list->data[ i ].num != i )
         {
             printlg( RED "---| Detected data inplausibility |---\n\n"
                          "Check %d elem num value.\n"
                          "--------------------------------------</p>\n\n", i );
-            list->status[ i ].nel = true;
+            list->data[i].stat.nel = true;
         }
 
     }
+}
+
+
+
+static void
+hash_check ( list_man* list )
+{
+    assert( list );
+    assert_my( list );
+
+    uint32_t temp = 0;
+
+    for ( int i = 1; i < list->capacity; i++ )
+    {
+        temp = hash_calc( list->data + i );
+        if ( temp != list->data[ i ].hash )
+        {
+            list->data[ i ].stat.hashfal = true;
+            list->data[ 0 ].stat.hashfal = true;
+        }
+    }
+
 }
 
 
@@ -126,4 +183,6 @@ verify ( list_man* list )
     data_plausibility( list );
 
     list_consist( list );
+
+    hash_check( list );
 }

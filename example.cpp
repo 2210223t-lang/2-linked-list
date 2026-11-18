@@ -6,10 +6,11 @@
 #include "debug/log.h"
 
 
+
 void
 pollute ( list_man* list )
 {
-
+    list->data[ 3 ].next = 5;
 }
 
 
@@ -17,13 +18,15 @@ int
 main ( void )
 {
     logger_open();
+
     list_man list = {};
     list_init( &list );
 
     for ( int i = 1; i <= 4; i++ )
         list_pushb( &list, i );
 
-    list.data[3].next = 9;
+    pollute( &list );
+
     list_pushb( &list, 5 );
 
     logger_close();
