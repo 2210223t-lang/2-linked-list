@@ -18,14 +18,12 @@ list_init ( list_man* list )
 {
     assert( list );
 
-    list->data   = ( list_elem* ) calloc( MIN_LIST_SIZE, sizeof( list_elem ) );
+    list->data = ( list_elem* ) calloc( MIN_LIST_SIZE, sizeof( list_elem ) );
 
     if ( !list->data )
     {
         printlg( "Initialization error.\n"
                  "Cannot allocate enough space, check parameters.\n\n" );
-
-        list->data[0].stat.fatal = true;
         return Failure;
     }
 
@@ -52,9 +50,6 @@ list_destr ( list_man* list )
 {
     assert( list );
 
-    if ( list->data[0].stat.fatal )
-        return Failure;
-
     if ( !list->data )
     {
         printlg( RED "Attempt to destroy null-pointer list.</p>\n\n" );
@@ -62,6 +57,7 @@ list_destr ( list_man* list )
     }
 
     free( list->data );
+    *list = {};
     return Success;
 }
 
@@ -71,7 +67,7 @@ reall_list ( list_man* list )
 {
     assert( list );
 
-    if ( list->data[0].stat.fatal )
+    if ( list->data[0].stat.fatal || list->data[ 0 ].stat.hashfal )
         return Failure;
 
     list_elem* data_temp = 0;
@@ -111,7 +107,7 @@ list_add ( list_man* list, int num, int value )
     printlg( BLU "Adding new elem result:</p>\n\n" );
     verify( list );
 
-    if ( list->data[0].stat.freefal )
+    if ( list->data[ 0 ].stat.freefal || list->data[ 0 ].stat.hashfal )
     {
         dump_dot( list );
         return Failure;
@@ -157,12 +153,12 @@ list_pushb ( list_man* list, int value )
     verify( list );
 
 
-    if ( list->data[0].stat.freefal )
+    if ( list->data[ 0 ].stat.freefal || list->data[ 0 ].stat.hashfal )
     {
         dump_dot( list );
         return Failure;
     }
-    else if ( list->data[0].stat.fatal )
+    else if ( list->data[ 0 ].stat.fatal )
         return Failure;
 
     hash_fill ( list );

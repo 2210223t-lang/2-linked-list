@@ -6,7 +6,7 @@
 [![GitHub last commit](https://img.shields.io/github/last-commit/2210223t-lang/2-linked-list)](https://github.com/2210223t-lang/2-linked-list/commits/main)
 
 
-![Example of program](https://github.com/2210223t-lang/utility/raw/main/list.png)
+![Example of program](https://github.com/2210223t-lang/utility/raw/main/'Снимок экрана — 2026-11-19 в 00.24.03.png')
 
 # Overview
 The repository contain 2-linked list realisation, equiped by a powerful debugging html - output system.

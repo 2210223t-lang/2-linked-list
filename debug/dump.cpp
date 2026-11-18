@@ -35,7 +35,7 @@ sequ_check ( list_man* list, int index, FILE* img )
 
     int temp = -1;
 
-    if ( index != list->data[ NEXT ].prev && PREV && PREV != -1 )
+    if ( index != list->data[ NEXT ].prev && PREV != -1 )
     {
         fprintf( img, "n%d -> n%d [ ", index, list->data[ index ].next );
             if ( list->data[ index ].stat.hashfal )

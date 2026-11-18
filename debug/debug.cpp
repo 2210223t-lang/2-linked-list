@@ -29,9 +29,9 @@ hash_calc ( list_elem* elem )
 {
     assert( elem );
 
-    uint32_t hash = hash_djb2( ( unsigned char* ) &elem->next, sizeof( elem->next ) );
-    hash += hash_djb2( ( unsigned char* ) &elem->prev,  sizeof ( elem->prev  ) );
-    hash += hash_djb2( ( unsigned char* ) &elem->value, sizeof ( elem->value ) );
+    uint32_t hash = hash_djb2( ( unsigned char* ) &elem->next, sizeof( elem->next ) ) << 5;
+    hash ^= hash_djb2 ( ( unsigned char* ) &elem->prev,  sizeof ( elem->prev  ) );
+    hash ^= hash_djb2 ( ( unsigned char* ) &elem->value, sizeof ( elem->value ) );
 
     return hash;
 }
@@ -43,8 +43,13 @@ hash_fill ( list_man* list )
     assert( list );
     assert( list );
 
+    list->data[ 0 ].hash  = hash_djb2( ( unsigned char* ) &list->data,     sizeof(          void* ) );
+    list->data[ 0 ].hash ^= hash_djb2( ( unsigned char* ) &list->free,     sizeof(     list->free ) );
+    list->data[ 0 ].hash ^= hash_djb2( ( unsigned char* ) &list->capacity, sizeof( list->capacity ) );
+
     for ( int i = 1; i < list->capacity; i++ )
-        list->data[ i ].hash = hash_calc( list->data + i );
+        if ( !list->data[ i ].stat.hashfal )
+            list->data[ i ].hash = hash_calc( list->data + i );
 }
 
 
@@ -124,6 +129,14 @@ data_plausibility ( list_man* list )
                      "--------------------------</p>\n\n", list->free, list->capacity );
         list->data[0].stat.freefal = true;
     }
+    else if ( list->data[ list->free ].prev != -1 && list->data[ list->free ].stat.hashfal )
+    {
+        printlg( RED "---| Failure detected |---\n\n"
+                     "Incorrect list->free value: %d.\n"
+                     "This elem is already filled.\n"
+                     "--------------------------</p>\n\n", list->free );
+        list->data[ 0 ].stat.freefal = true;
+    }
 
 
     if ( list->data[0].stat.fatal )
@@ -161,14 +174,18 @@ hash_check ( list_man* list )
 
     uint32_t temp = 0;
 
+    temp  = hash_djb2( ( unsigned char* ) &list->data,     sizeof(          void* ) );
+    temp ^= hash_djb2( ( unsigned char* ) &list->free,     sizeof(     list->free ) );
+    temp ^= hash_djb2( ( unsigned char* ) &list->capacity, sizeof( list->capacity ) );
+
+    if ( temp != list->data[ 0 ].hash )
+        list->data[ 0 ].stat.hashfal = true;
+
     for ( int i = 1; i < list->capacity; i++ )
     {
         temp = hash_calc( list->data + i );
         if ( temp != list->data[ i ].hash )
-        {
             list->data[ i ].stat.hashfal = true;
-            list->data[ 0 ].stat.hashfal = true;
-        }
     }
 
 }
