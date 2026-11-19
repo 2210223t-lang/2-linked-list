@@ -149,9 +149,7 @@ int
 list_pushb ( list_man* list, int value )
 {
     assert( list );
-
     verify( list );
-
 
     if ( list->data[ 0 ].stat.freefal || list->data[ 0 ].stat.hashfal )
     {

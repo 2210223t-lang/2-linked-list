@@ -15,57 +15,21 @@ static size_t dump_id = 0;
 
 
 static int
-find_prev ( list_man* list, int index_find )
+find_elem ( list_man* list, int index_find, bool is_prev )
 {
     assert( list );
 
-    for ( int index = 1; index < list->capacity; index++ )
-        if ( !list->data[ index ].stat.hashfal && PREV == index_find )
-            return index;
-
-    return -1;
-}
-
-
-static ListError
-sequ_check ( list_man* list, int index, FILE* img )
-{
-    assert( list );
-    assert( img );
-
-    int temp = -1;
-
-    if ( index != list->data[ NEXT ].prev && PREV != -1 )
+    if ( is_prev )
     {
-        fprintf( img, "n%d -> n%d [ ", index, list->data[ index ].next );
-            if ( list->data[ index ].stat.hashfal )
-            {
-                temp = find_prev( list, index );
-                fprintf( img, "color = \"#f9003e\" ]\n" );
-                if ( temp != -1 )
-                    fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", index, temp );
-                return Failure;
-            }
-
-            if ( !list->data[ index ].stat.hashfal && !list->data[ NEXT ].stat.hashfal )
-            {
-                temp = find_prev( list, index );
-                fprintf( img, "color = \"#f9003e\" ]\n" );
-            }
-            else if ( list->data[ NEXT ].stat.hashfal )
-                fprintf( img, "color = \"#3ff407\" ]\n" );
-
-            if ( list->data[NEXT].prev >= 0 && list->data[NEXT].prev < list->capacity )
-                fprintf(img, "n%d -> n%d [color=\"#f9003e\"]\n", NEXT, list->data[NEXT].prev );
-            else
-                fprintf( img, "n%d -> out [ color = \"#f9003e\"]\n", NEXT );
-
-            if ( temp != -1 && !list->data[ index ].stat.hashfal && !list->data[ NEXT ].stat.hashfal )
-                    fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", index, temp );
-
-        return Failure;
+        for ( int index = 1; index < list->capacity; index++ )
+            if ( !list->data[ index ].stat.hashfal && PREV == index_find )
+                return index;
     }
-    return Success;
+    else
+        for ( int index = 1; index < list->capacity; index++ )
+            if ( !list->data[ index ].stat.hashfal && NEXT == index_find )
+                return index;
+    return -1;
 }
 
 
@@ -75,13 +39,13 @@ dump_colour ( list_man* list, int index, FILE* img, bool is_node )
     assert( list );
     assert( img );
 
-    if ( list->data[0].stat.fatal )
+    if ( list->data[ 0 ].stat.fatal )
         return;
 
     fprintf( img, "style = filled, " );
 
-    if ( list->data[ index ].stat.datainc + list->data[ index ].stat.freefal + list->data[ index ].stat.seqfal +
-        list->data[ index ].stat.fatal + list->data[ index ].stat.hashfal && index && is_node )
+    if ( list->data[ index ].stat.datainc + list->data[ index ].stat.freefal +
+         list->data[ index ].stat.fatal   + list->data[ index ].stat.hashfal && index )
         fprintf( img, "color = \"#f9003e\", fontcolor = \"#fffbfb\" ]\n" );
     else if ( !index )
         fprintf( img, "color = \"#b4da08\" ]\n" );
@@ -91,6 +55,34 @@ dump_colour ( list_man* list, int index, FILE* img, bool is_node )
         fprintf( img, "color = \"#6c6c6c\" ]\n" );
     else
         fprintf( img, "color = \"#3ff407\" ]\n" );
+}
+
+
+static void
+sequ_restore ( list_man* list, int index, FILE* img )
+{
+    assert( list );
+
+    list_elem* curr = list->data + index;
+
+    int prev_correct = find_elem( list, index, true );
+
+    if ( prev_correct != -1 && list->data[ index ].stat.hashfal && prev_correct > index )
+        fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", index, prev_correct );
+    else if ( !list->data[ index ].stat.hashfal && PREV != -1 && NEXT != 0 )
+        fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", index, NEXT );
+    else if ( !list->data[ index ].stat.hashfal && PREV == -1 && NEXT != 0 )
+        fprintf( img, "n%d -> n%d [ color = \"#6c6c6c\" ]\n", index, NEXT );
+
+    int next_correct = find_elem( list, index, false );
+
+    if ( next_correct != -1 && PREV >= 0 && PREV < list->capacity && list->data[ PREV ].next != index &&
+         list->data[ index ].stat.hashfal && next_correct > index )
+        fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", next_correct, index );
+    else if ( !list->data[ index ].stat.hashfal && PREV != -1 && PREV > index)
+    {
+        fprintf( img, "n%d -> n%d [ color = \"#3ff407\" ]\n", PREV, index );
+    }
 }
 
 
@@ -136,14 +128,28 @@ dump_seq ( list_man* list, FILE* img )
 
     for ( int index = 1; index < list->capacity; index++ )
     {
-        if ( NEXT >= list->capacity || NEXT < 0 || ( PREV < 0 && PREV != -1 ) )
-            fprintf( img, "n%d -> out [ color = \"#f9003e\" ]\n", index );
-        else if ( sequ_check( list, index, img ) == Success )
-            if ( NEXT )
+        sequ_restore( list, index, img );
+        if ( list->data[ index ].stat.hashfal && ( ( NEXT >= list->capacity || NEXT < 0 ) ||
+           ( ( PREV < 0 && PREV != -1 ) || PREV > list->capacity ) ) )
+        {
+            if ( NEXT >= list->capacity || NEXT < 0 )
+                fprintf( img, "n%d -> out [ color = \"#f9003e\" ]\n", index );
+            if ( ( PREV < 0 && PREV != -1 ) || PREV > list->capacity )
+                fprintf( img, "out -> n%d [ color = \"#f9003e\" ]\n", index );
+        }
+        else if ( list->data[ index ].stat.hashfal )
+        {
+            if ( index != list->data[ NEXT ].prev )
             {
                 fprintf( img, "n%d -> n%d [ ", index, NEXT );
                 dump_colour( list, index, img, false );
             }
+            if ( PREV != -1 && index != list->data[ PREV ].next )
+            {
+                fprintf( img, "n%d -> n%d [ ", PREV, index );
+                dump_colour( list, index, img, false );
+            }
+        }
     }
 }
 
@@ -154,7 +160,6 @@ convert_svg ( void )
     char command[ PATH_MAX ] = "";
 
     snprintf( command, PATH_MAX, "dot -Tsvg list_log/img/%zd.dot -o list_log/svg/%zd.svg", dump_id, dump_id );
-
     system( command );
 }
 
@@ -173,7 +178,6 @@ status_clean( list_man* list )
 
     for ( int i = 0; i < list->capacity; i++ )
         *( ( char* ) &list->data[ i ].stat ) = 0;
-
 }
 
 
@@ -183,12 +187,15 @@ print_meta ( list_man* list )
     assert( list );
 
     printlg( BLU "\n\n===| List metadata |===\n"
-                 "Capacity value: %d\n"
-                 "Free value: %d\n"
-                 "Head: %d\n"
-                 "Tail: %d</p>\n",
-                 list->capacity, list->free,
-                 list->data[ 0 ].next, list->data[ 0 ].prev );
+                 "Capacity value: %d\n", list->capacity );
+    if ( list->capacity < 0 )
+        printlg( "^^^^^^^^^^^^^^\n" );
+    printlg("Free value: %d\n", list->free );
+    if ( list->free < 0 || list->free > list->capacity || list->data[ list->free ].prev != -1 )
+        printlg( "^^^^^^^^^^^^^^\n" );
+    printlg( "Head: %d\n"
+             "Tail: %d</p>\n",
+              list->data[ 0 ].next, list->data[ 0 ].prev );
 }
 
 

@@ -10,7 +10,7 @@
 void
 pollute ( list_man* list )
 {
-    list->data[ 3 ].next = 5;
+    list->data[ 7 ].next = 1;
 }
 
 

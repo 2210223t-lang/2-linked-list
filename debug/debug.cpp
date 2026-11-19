@@ -150,8 +150,6 @@ data_plausibility ( list_man* list )
             printlg( RED "---| Detected data inplausibility |---\n\n"
                          "Check %d elem prev/next value.\n"
                          "--------------------------------------</p>\n\n", i );
-
-            list->data[0].stat.fatal = true;
         }
         if ( list->data[ i ].num != i )
         {
@@ -179,8 +177,12 @@ hash_check ( list_man* list )
     temp ^= hash_djb2( ( unsigned char* ) &list->capacity, sizeof( list->capacity ) );
 
     if ( temp != list->data[ 0 ].hash )
+    {
         list->data[ 0 ].stat.hashfal = true;
-
+        printlg( RED " ---| Detected hash inconsistency in signature |---\n"
+                     "Check metadata.\n"
+                     "---------------------------------------------------\n</p>\n" );
+    }
     for ( int i = 1; i < list->capacity; i++ )
     {
         temp = hash_calc( list->data + i );
@@ -188,9 +190,9 @@ hash_check ( list_man* list )
         {
             list->data[ i ].stat.hashfal = true;
             list->data[ 0 ].stat.hashfal = true;
+            printlg( RED "---| Detected hash inconsistency in %d elem |---</p>\n", i );
         }
     }
-
 }
 
 
