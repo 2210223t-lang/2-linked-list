@@ -185,7 +185,10 @@ hash_check ( list_man* list )
     {
         temp = hash_calc( list->data + i );
         if ( temp != list->data[ i ].hash )
+        {
             list->data[ i ].stat.hashfal = true;
+            list->data[ 0 ].stat.hashfal = true;
+        }
     }
 
 }

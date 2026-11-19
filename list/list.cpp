@@ -176,7 +176,7 @@ list_extr ( list_man* list, int num )
     printlg( BLU "Extracting result:</p>\n\n" );
     verify( list );
 
-    if ( list->data[0].stat.fatal )
+    if ( list->data[0].stat.fatal || list->data[ 0 ].stat.hashfal || list->data[ 0 ].stat.freefal )
         return Failure;
 
     if ( list->data[ num ].prev == -1 || num <= 0 || num >= list->capacity )
