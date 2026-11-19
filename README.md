@@ -21,9 +21,14 @@ The repository contain 2-linked list realisation, equiped by a powerful debuggin
 
 ### Example of usage
 
-```list_add( &list, number1, number2 )```
-Adds element with number2 value. After number1 elem.
-
+```
+    list_init( &list );
+    list_add( &list, number1, number2 );
+    list_destr( &list );
+```
+1) Initializes list
+2) Adds element with number2 value. After number1 elem.
+3) Destroys it
 ## Debugging meaning
 ```
  RED - symbolizes error

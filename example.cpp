@@ -22,7 +22,7 @@ main ( void )
     list_man list = {};
     list_init( &list );
 
-    for ( int i = 1; i <= 4; i++ )
+    for ( int i = 1; i <= 10; i++ )
         list_pushb( &list, i );
 
     pollute( &list );
